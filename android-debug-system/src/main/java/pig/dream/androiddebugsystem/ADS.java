@@ -3,7 +3,7 @@ package pig.dream.androiddebugsystem;
 import android.content.Context;
 import android.util.Log;
 
-import pig.dream.androiddebugsystem.base.CoreServer;
+import pig.dream.androiddebugsystem.http.CoreServer;
 import pig.dream.androiddebugsystem.utils.NetworkUtils;
 
 /**

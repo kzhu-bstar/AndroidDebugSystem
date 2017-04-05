@@ -10,6 +10,9 @@ import java.io.IOException;
 public class ClosableUtils {
 
     public static void close(Closeable closeable) {
+        if (closeable == null) {
+            return ;
+        }
         try {
             closeable.close();
         } catch (IOException e) {

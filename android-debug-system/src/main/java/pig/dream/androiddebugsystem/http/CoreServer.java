@@ -1,4 +1,4 @@
-package pig.dream.androiddebugsystem.base;
+package pig.dream.androiddebugsystem.http;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,8 +6,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import pig.dream.androiddebugsystem.utils.ClosableUtils;
 
 /**
  * Created by zhukun on 2017/4/1.
@@ -23,6 +21,8 @@ public class CoreServer implements Runnable {
     private int port;
 
     public CoreServer(Context context, int port) {
+        HttpRoute.getInstance().initialize(context);
+        HttpRoute.getInstance().print();
         requestHandler = new RequestHandler(context);
         this.port = port;
     }
@@ -49,15 +49,18 @@ public class CoreServer implements Runnable {
     public void run() {
         try {
             serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            Log.e("ADS", "Server Socket init error");
+        }
+        try {
             while (isRunning) {
-                Socket socket = serverSocket.accept();
-
-                Log.i("ADS","------------------");
+                Socket socket  = serverSocket.accept();
                 requestHandler.handle(socket);
                 socket.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("ADS", "Server Socket close...");
         }
+
     }
 }
