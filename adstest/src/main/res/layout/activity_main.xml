@@ -9,5 +9,5 @@
     tools:context="pig.dream.adstest.MainActivity">
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Hello World1111111!" />
 </RelativeLayout>
