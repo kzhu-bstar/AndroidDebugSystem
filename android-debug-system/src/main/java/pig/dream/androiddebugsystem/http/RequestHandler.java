@@ -15,8 +15,10 @@ import java.net.Socket;
 
 public class RequestHandler {
     AssetManager assetManager;
+    Context context;
 
     public RequestHandler(Context context) {
+        this.context = context.getApplicationContext();
         this.assetManager = context.getAssets();
     }
 
@@ -29,16 +31,20 @@ public class RequestHandler {
         Log.i("ADS", "HttpServletRequest uri " + uri + " Method " + request.getMethod());
 
         HttpResponse response = new HttpServletResponse();
-        HttpServlet httpServlet = HttpRoute.getInstance().getHttpServletByPath(uri);
+        IHttpServlet httpServlet = HttpRoute.getInstance().getHttpServletByPath(uri);
         if (httpServlet == null) {
             Log.i("ADS", "----------" + uri);
             response.setStatuCode(HttpCode.HTTP_NOT_FOUND);
         } else {
+            HttpContext httpContext = new HttpContext();
+            httpContext.context = context;
+            httpServlet.init(httpContext);
             if (request.getMethod().toUpperCase().equals("GET")) {
                 httpServlet.doGet(request, response);
             } else {
                 httpServlet.doPost(request, response);
             }
+            httpServlet.destory(httpContext);
         }
         new ResponseHandler(assetManager).println(os, request, response);
         os.close();

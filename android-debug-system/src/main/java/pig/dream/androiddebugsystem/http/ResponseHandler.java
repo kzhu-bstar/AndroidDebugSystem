@@ -8,9 +8,9 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
 
 import pig.dream.androiddebugsystem.utils.ClosableUtils;
+import pig.dream.androiddebugsystem.utils.Utils;
 
 /**
  * Created by zhukun on 2017/4/5.
@@ -24,11 +24,10 @@ public class ResponseHandler {
     }
 
     public void println(OutputStream os, HttpRequest httpRequest, HttpResponse httpResponse) {
-        String html = null;
         byte[] bytes = null;
         if (200 == httpResponse.getStatuCode()) {
-            html = httpResponse.getHtmlContent();
-            if (TextUtils.isEmpty(html)) {
+            bytes = httpResponse.getHtmlContent();
+            if (Utils.isEmpty(bytes)) {
                 bytes = getHtmlFromFile(httpResponse.getHtmlFile());
             }
             if (bytes == null || bytes.length == 0) {
@@ -44,34 +43,34 @@ public class ResponseHandler {
         //响应头
         sb.append("Server: " + HttpResponse.SERVER_NAME + "\r\n");
         sb.append("Content-Type: " + httpResponse.getContentType() + "\r\n");
-        sb.append("Date: " + new Date() + "\r\n");
-        if (200 == httpResponse.getStatuCode() && !TextUtils.isEmpty(html)) {
-                sb.append("Content-Length: " + html.getBytes().length + "\r\n");
+        sb.append("Date: " + Utils.GetCurrentDate() + "\r\n");
+        sb.append("Last-Modified: " + Utils.GetCurrentDate() + "\r\n");
 
-                //响应内容
-                sb.append("\r\n");
-                sb.append(html);
+        if (200 == httpResponse.getStatuCode()) {
+            sb.append("Content-Length: " + bytes.length + "\r\n");
+
+            //响应内容
+            sb.append("\r\n");
+//            sb.append(html);
         }
 
 
         BufferedOutputStream bos = new BufferedOutputStream(os);
-//        PrintWriter printWriter = new PrintWriter(os);
         try {
             bos.write(sb.toString().getBytes());
-            if (bytes != null) {
+            if (!Utils.isEmpty(bytes)) {
                 bos.write(bytes);
             }
             bos.flush();
+            bos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public byte[] getHtmlFromFile(String file) {
+    private byte[] getHtmlFromFile(String file) {
         Log.i("ADS", "getHtmlFromFile " + file);
-        if ("/i/eg_tulip.jpg".equals(file)) {
-            file = "i/eg_tulip.jpg";
-        }
+        file = getAsssetFilePathFromUri(file);
         InputStream is = null;
         try {
             is = assetManager.open(file);
@@ -86,6 +85,13 @@ public class ResponseHandler {
         }
 
         return null;
+    }
+
+    private String getAsssetFilePathFromUri(String uri) {
+        if (uri != null && uri.startsWith("/")) {
+            return uri.substring(1, uri.length());
+        }
+        return uri;
     }
 
     public void reseponse(int code) {

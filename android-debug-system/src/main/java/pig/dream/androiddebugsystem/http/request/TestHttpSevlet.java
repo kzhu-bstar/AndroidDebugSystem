@@ -1,8 +1,12 @@
 package pig.dream.androiddebugsystem.http.request;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 import pig.dream.androiddebugsystem.http.HttpRequest;
 import pig.dream.androiddebugsystem.http.HttpResponse;
@@ -14,21 +18,15 @@ import pig.dream.androiddebugsystem.http.RoutePath;
  */
 
 @RoutePath("/test")
-public class TestHttpSevlet implements HttpServlet {
+public class TestHttpSevlet extends HttpServlet {
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) throws IOException {
         Log.i("ADS", "Look....");
 
-//        response.setHtmlContent("Hello world, hahah................");
-
         response.setHtmlFile("abc.html");
     }
 
-    @Override
-    public void doPost(HttpRequest request, HttpResponse response) throws IOException {
-
-    }
 
     @Override
     public String toString() {

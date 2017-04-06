@@ -21,7 +21,7 @@ import pig.dream.androiddebugsystem.http.request.StaticFileHttpSevlet;
 
 public class HttpRoute {
 
-    private HashMap<String, HttpServlet> map = new HashMap<>();
+    private HashMap<String, IHttpServlet> map = new HashMap<>();
     private StaticFileHttpSevlet staticFileHttpSevlet = new StaticFileHttpSevlet();
 
     private final static class SINGLEHOLDER {
@@ -45,8 +45,8 @@ public class HttpRoute {
                     String path = contentView.value();
                     Constructor cons = c.getDeclaredConstructor();
                     Object object = cons.newInstance();
-                    if (object instanceof HttpServlet) {
-                        map.put(path, (HttpServlet) object);
+                    if (object instanceof IHttpServlet) {
+                        map.put(path, (IHttpServlet) object);
                     }
                 }
             } catch (ClassNotFoundException e) {
@@ -63,8 +63,8 @@ public class HttpRoute {
         }
     }
 
-    public HttpServlet getHttpServletByPath(String path) {
-        HttpServlet httpSevlet = map.get(path);
+    public IHttpServlet getHttpServletByPath(String path) {
+        IHttpServlet httpSevlet = map.get(path);
         if (httpSevlet == null) {
             httpSevlet = staticFileHttpSevlet;
         }

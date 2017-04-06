@@ -16,7 +16,7 @@ public interface HttpResponse {
 
     public String getStatuCodeStr();
 
-    public String getHtmlContent();
+    public byte[] getHtmlContent();
 
     public String getHtmlFile();
 
@@ -29,4 +29,8 @@ public interface HttpResponse {
     public void setContentType(String contentType);
 
     public void setStatuCode(HttpCode.Code statuCode);
+
+    public void getLastModified();
+
+    public void setLastModified();
 }

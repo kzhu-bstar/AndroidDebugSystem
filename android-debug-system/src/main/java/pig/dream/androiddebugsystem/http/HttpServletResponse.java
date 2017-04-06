@@ -32,13 +32,18 @@ public class HttpServletResponse implements HttpResponse {
     }
 
     @Override
-    public String getHtmlContent() {
-        return content;
+    public byte[] getHtmlContent() {
+        return content.getBytes();
     }
 
     @Override
     public String getHtmlFile() {
         return htmlFile;
+    }
+
+    @Override
+    public void getLastModified() {
+
     }
 
     @Override
@@ -64,5 +69,11 @@ public class HttpServletResponse implements HttpResponse {
     @Override
     public void setStatuCode(HttpCode.Code statuCode) {
         this.statuCode = statuCode;
+    }
+
+
+    @Override
+    public void setLastModified() {
+
     }
 }

@@ -6,6 +6,7 @@ package pig.dream.androiddebugsystem.http;
 
 public class HttpCode {
     public static final Code HTTP_OK = new Code(200, "OK");
+    public static final Code HTTP_NOT_MODIFIED = new Code(304, "Not Modified");
     public static final Code HTTP_NOT_FOUND = new Code(404, "Not Found");
 
     public static class Code {
