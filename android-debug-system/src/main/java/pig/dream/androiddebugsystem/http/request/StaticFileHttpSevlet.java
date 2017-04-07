@@ -26,7 +26,8 @@ public class StaticFileHttpSevlet extends HttpServlet {
 
         String uri = request.getUri();
         response.setContentType(HttpContentType.ContentTypeByFileName(uri));
-        response.setHtmlFile(uri);
+        byte[] content = getHtmlFromFile(uri);
+        response.setHtmlContent(content);
     }
 
     @Override

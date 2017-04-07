@@ -18,11 +18,7 @@ public interface HttpResponse {
 
     public byte[] getHtmlContent();
 
-    public String getHtmlFile();
-
-    public void setHtmlContent(String html);
-
-    public void setHtmlFile(String htmlFile);
+    public void setHtmlContent(byte[] content);
 
     public SelectionKey getKey();
 

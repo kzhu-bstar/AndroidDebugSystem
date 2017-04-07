@@ -1,7 +1,6 @@
 package pig.dream.androiddebugsystem.http;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -14,12 +13,10 @@ import java.net.Socket;
  */
 
 public class RequestHandler {
-    AssetManager assetManager;
     Context context;
 
     public RequestHandler(Context context) {
         this.context = context.getApplicationContext();
-        this.assetManager = context.getAssets();
     }
 
     public void handle(Socket socket) throws IOException {
@@ -27,26 +24,10 @@ public class RequestHandler {
         OutputStream os = socket.getOutputStream();
         String httpHeaders = readHttpHeaders(is);
         HttpRequest request = new HttpServletRequest(httpHeaders);
-        String uri = request.getUri();
-        Log.i("ADS", "HttpServletRequest uri " + uri + " Method " + request.getMethod());
+        Log.i("ADS", "HttpServletRequest uri " + request.getUri() + " Method " + request.getMethod());
 
-        HttpResponse response = new HttpServletResponse();
-        IHttpServlet httpServlet = HttpRoute.getInstance().getHttpServletByPath(uri);
-        if (httpServlet == null) {
-            Log.i("ADS", "----------" + uri);
-            response.setStatuCode(HttpCode.HTTP_NOT_FOUND);
-        } else {
-            HttpContext httpContext = new HttpContext();
-            httpContext.context = context;
-            httpServlet.init(httpContext);
-            if (request.getMethod().toUpperCase().equals("GET")) {
-                httpServlet.doGet(request, response);
-            } else {
-                httpServlet.doPost(request, response);
-            }
-            httpServlet.destory(httpContext);
-        }
-        new ResponseHandler(assetManager).println(os, request, response);
+        ResponseHandler responseHandler = new ResponseHandler();
+        responseHandler.start(context, request, os);
         os.close();
         is.close();
     }

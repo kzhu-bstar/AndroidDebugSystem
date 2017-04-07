@@ -13,8 +13,7 @@ public class HttpServletResponse implements HttpResponse {
     private String contentType = "text/html";
     //响应码  defalut 为200
     private HttpCode.Code statuCode = HttpCode.HTTP_OK;
-    private String htmlFile = "";
-    private String content = "";
+    private byte[] content = "".getBytes();
 
     @Override
     public String getContentType() {
@@ -33,12 +32,7 @@ public class HttpServletResponse implements HttpResponse {
 
     @Override
     public byte[] getHtmlContent() {
-        return content.getBytes();
-    }
-
-    @Override
-    public String getHtmlFile() {
-        return htmlFile;
+        return content;
     }
 
     @Override
@@ -47,13 +41,8 @@ public class HttpServletResponse implements HttpResponse {
     }
 
     @Override
-    public void setHtmlContent(String html) {
-        this.content = html;
-    }
-
-    @Override
-    public void setHtmlFile(String htmlFile) {
-        this.htmlFile = htmlFile;
+    public void setHtmlContent(byte[] content) {
+        this.content = content;
     }
 
     @Override

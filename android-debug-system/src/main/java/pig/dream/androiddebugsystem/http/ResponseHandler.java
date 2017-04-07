@@ -1,15 +1,12 @@
 package pig.dream.androiddebugsystem.http;
 
-import android.content.res.AssetManager;
-import android.text.TextUtils;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
-import pig.dream.androiddebugsystem.utils.ClosableUtils;
 import pig.dream.androiddebugsystem.utils.Utils;
 
 /**
@@ -17,23 +14,34 @@ import pig.dream.androiddebugsystem.utils.Utils;
  */
 
 public class ResponseHandler {
-    private AssetManager assetManager;
 
-    public ResponseHandler(AssetManager assetManager) {
-        this.assetManager = assetManager;
+    public ResponseHandler() {
     }
 
-    public void println(OutputStream os, HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void start(Context context, HttpRequest request, OutputStream os) throws IOException {
+        String uri = request.getUri();
+        HttpResponse response = new HttpServletResponse();
+        IHttpServlet httpServlet = HttpRoute.getInstance().getHttpServletByPath(uri);
+        if (httpServlet == null) {
+            Log.i("ADS", "----------" + uri);
+            response.setStatuCode(HttpCode.HTTP_NOT_FOUND);
+        } else {
+            HttpContext httpContext = new HttpContext();
+            httpContext.context = context;
+            httpServlet.init(httpContext);
+            httpServlet.start(request, response);
+            httpServlet.destory(httpContext);
+        }
+        out(os, request, response);
+    }
+
+
+    public void out(OutputStream os, HttpRequest httpRequest, HttpResponse httpResponse) {
         byte[] bytes = null;
         if (200 == httpResponse.getStatuCode()) {
             bytes = httpResponse.getHtmlContent();
             if (Utils.isEmpty(bytes)) {
-                bytes = getHtmlFromFile(httpResponse.getHtmlFile());
-            }
-            if (bytes == null || bytes.length == 0) {
                 httpResponse.setStatuCode(HttpCode.HTTP_NOT_FOUND);
-            } else {
-//                html = new String(bytes);
             }
         }
 
@@ -67,50 +75,4 @@ public class ResponseHandler {
             e.printStackTrace();
         }
     }
-
-    private byte[] getHtmlFromFile(String file) {
-        Log.i("ADS", "getHtmlFromFile " + file);
-        file = getAsssetFilePathFromUri(file);
-        InputStream is = null;
-        try {
-            is = assetManager.open(file);
-            int len = is.available();
-            byte[] buffer = new byte[len];
-            is.read(buffer, 0, len);
-            return buffer;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            ClosableUtils.close(is);
-        }
-
-        return null;
-    }
-
-    private String getAsssetFilePathFromUri(String uri) {
-        if (uri != null && uri.startsWith("/")) {
-            return uri.substring(1, uri.length());
-        }
-        return uri;
-    }
-
-    public void reseponse(int code) {
-
-    }
-
-    public String detectMimeType(String fileName) {
-        if (TextUtils.isEmpty(fileName)) {
-            return null;
-        } else if (fileName.endsWith(".html")) {
-            return "text/html";
-        } else if (fileName.endsWith(".js")) {
-            return "application/javascript";
-        } else if (fileName.endsWith(".css")) {
-            return "text/css";
-        } else {
-            return "application/octet-stream";
-        }
-    }
-
-
 }

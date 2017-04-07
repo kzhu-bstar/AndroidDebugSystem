@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public interface IHttpServlet {
     void init(HttpContext httpContext);
+    void start(HttpRequest request, HttpResponse response) throws IOException;
     void doGet(HttpRequest request, HttpResponse response) throws IOException;
     void doPost(HttpRequest request, HttpResponse response) throws IOException;
     void destory(HttpContext httpContext);

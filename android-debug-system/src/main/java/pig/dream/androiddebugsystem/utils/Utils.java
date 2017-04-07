@@ -24,7 +24,6 @@ public class Utils {
     }
 
     public static String GetCurrentDate() {
-        // TODO Auto-generated method stub
         Calendar cal = Calendar.getInstance();
 
         // Locale.US用于将日期区域格式设为美国（英国也可以）。缺省改参数的话默认为机器设置，如中文系统星期将显示为汉子“星期六”

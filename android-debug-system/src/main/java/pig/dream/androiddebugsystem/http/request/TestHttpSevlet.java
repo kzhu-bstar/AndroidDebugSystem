@@ -1,12 +1,8 @@
 package pig.dream.androiddebugsystem.http.request;
 
-import android.content.Context;
 import android.util.Log;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
 
 import pig.dream.androiddebugsystem.http.HttpRequest;
 import pig.dream.androiddebugsystem.http.HttpResponse;
@@ -24,7 +20,9 @@ public class TestHttpSevlet extends HttpServlet {
     public void doGet(HttpRequest request, HttpResponse response) throws IOException {
         Log.i("ADS", "Look....");
 
-        response.setHtmlFile("abc.html");
+        byte[] content = getHtmlFromFile("abc.html");
+        response.setHtmlContent(content);
+        httpContext.tplName = "";
     }
 
 
