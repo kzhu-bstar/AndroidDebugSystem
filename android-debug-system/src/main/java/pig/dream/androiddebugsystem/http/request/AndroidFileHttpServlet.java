@@ -28,9 +28,7 @@ public class AndroidFileHttpServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) throws IOException {
-        LinkedHashMap<String, Object> fileMap = new LinkedHashMap<>();
         StringBuilder stringBuilder = new StringBuilder();
-//        File rootFile = null;
         Map<String, Object> map = request.getAttribute();
         Set<String> sets = map.keySet();
         for (String key : sets) {
@@ -46,7 +44,8 @@ public class AndroidFileHttpServlet extends HttpServlet {
             path = rootPath;
         }
 
-        ArrayList<FileJavaBean> list = getCurrentPath(rootPath, path);
+        List<FileJavaBean> list = getCurrentPath(rootPath, path);
+        List<FileJavaBean> scanList = scanDir(path);
 
         PackageInfo packageInfo = getPackageInfo();
         if (packageInfo != null) {
@@ -57,33 +56,10 @@ public class AndroidFileHttpServlet extends HttpServlet {
         }
         Log.i("ADS", "list size " + list.size());
 
-        List<String> nameList = new ArrayList<>();
-        List<String> pathList = new ArrayList<>();
-        for (int i = list.size() - 1; i >= 0; i--) {
-            FileJavaBean javaBean = list.get(i);
-            nameList.add(javaBean.getName());
-            pathList.add(javaBean.getPath());
-        }
         httpContext.data.put("pathList", list);
-//        httpContext.data.put("nameList", nameList);
-//        httpContext.data.put("pathList", pathList);
+        httpContext.data.put("scanList", scanList);
 
-        List<FileJavaBean> paths = scanDir(path);
-        nameList = new ArrayList<>();
-        pathList = new ArrayList<>();
-        for (int i = 0; i < paths.size(); i++) {
-            FileJavaBean javaBean = paths.get(i);
-            nameList.add(javaBean.getName());
-            pathList.add(javaBean.getPath());
-        }
-
-        httpContext.data.put("path2List", paths);
-//        httpContext.data.put("name2List", nameList);
-//        httpContext.data.put("path2List", pathList);
-//        httpContext.data.put("path2List", paths);
-
-        httpContext.tplName = "file.ftl";
-//        response.setHtmlFile("abc.html");
+        httpContext.tplName = "file.btl";
     }
 
     @Override
@@ -157,7 +133,7 @@ public class AndroidFileHttpServlet extends HttpServlet {
         return pkg;
     }
 
-    private ArrayList<FileJavaBean> getCurrentPath(String rootPath, String path) {
+    private List<FileJavaBean> getCurrentPath(String rootPath, String path) {
         if (TextUtils.isEmpty(path) || !path.startsWith(rootPath)) {
             // error
             return null;
@@ -176,6 +152,12 @@ public class AndroidFileHttpServlet extends HttpServlet {
         fileJavaBean.setName("root");
         fileJavaBean.setPath(rootPath);
         list.add(fileJavaBean);
-        return list;
+
+        int len = list.size();
+        List<FileJavaBean> result = new ArrayList<>(len);
+        for (int i = len -1; i >= 0; i--) {
+            result.add(list.get(i));
+        }
+        return result;
     }
 }

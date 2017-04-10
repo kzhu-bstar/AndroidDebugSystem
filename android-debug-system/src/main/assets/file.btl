@@ -63,7 +63,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><a href="/static/abc.html">Home</a></li>
+                <li><a href="/abc.html">Home</a></li>
                 <li class="active"><a href="#">File System <span class="sr-only">(current)</span></a></li>
                 <li><a href="#">Analytics</a></li>
                 <li><a href="#">Export</a></li>
@@ -86,9 +86,9 @@
 
             <h2 class="sub-header hidden"><a href="/ads/file">/root</a></h2>
             <h2 class="sub-header">
-            <%for(var i=0;i<nameList.~size;i++){%>
-                /<a href="/ads/file?path=${pathList[i]}">${nameList[i]}</a>
-            <%}%>
+            <%for p in pathList%>
+                /<a href="/ads/file?path=${p.path}">${p.name}</a>
+            <%endfor%>
             </h2>
             
             <div class="table-responsive">
@@ -103,15 +103,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <%for(var i=0;i<name2List.~size;i++){%>
+                    <%for p in scanList%>
                     <tr>
                         <td>${i+1}</td>
-                        <td><a href="/ads/file?path=${path2List[i]}">${name2List[i]}</a></td>
-                        <td>${path2List[i]}</td>
+                        <td><a href="/ads/file?path=${p.path}">${p.name}</a></td>
+                        <td>${p.path}</td>
                         <td>--</td>
                         <td>--</td>
                     </tr>
-                    <%}%>
+                    <%endfor%>
                     </tbody>
                 </table>
             </div>

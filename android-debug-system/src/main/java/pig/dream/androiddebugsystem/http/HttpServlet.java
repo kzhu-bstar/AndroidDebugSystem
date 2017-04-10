@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 
+import pig.dream.androiddebugsystem.base.Timer;
 import pig.dream.androiddebugsystem.utils.ClosableUtils;
 
 /**
@@ -81,7 +82,10 @@ public class HttpServlet implements IHttpServlet {
         String content = new String(getHtmlFromFile(httpContext.tplName));
         Log.i("ADS", "httpContext data size" + httpContext.data.size());
 //        String result = BeetlHelper.render(content, httpContext.data);
-        String result = FreemarkerHelper.render(content, httpContext.data);
+//        String result = FreemarkerHelper.render(content, httpContext.data);
+        Timer.init();
+        String result = AtlHelper.render(content, httpContext.data);
+        Timer.out("Render time: ");
         if (TextUtils.isEmpty(result)) {
             return;
         }
