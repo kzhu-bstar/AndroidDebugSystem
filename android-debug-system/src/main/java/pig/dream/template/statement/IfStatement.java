@@ -14,6 +14,18 @@ public class IfStatement extends Statement {
 
     @Override
     protected String exec(Map<String, Object> data) {
-        return null;
+        String[] split = variable.split("\\ ");
+
+        Object object = data.get(split[1]);
+        boolean flag = (boolean) object;
+        if (flag) {
+            return out;
+        }
+        return "";
+    }
+
+    @Override
+    protected int type() {
+        return TYPE.IF;
     }
 }

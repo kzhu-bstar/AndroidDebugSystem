@@ -86,30 +86,6 @@ public class ForStatement {
         return sb.toString();
     }
 
-
-    private String parseArgs(String src, Map<String, Object> data) {
-        String[] split = src.split("\\.");
-        Log.i("Split --- " + split.length);
-        int splitLen = split.length;
-        Object obj = data.get(split[0]);// 键值
-
-        String value = null;
-        if (obj == null) {
-            value = "";
-        } else if (splitLen == 1) {
-            value = String.valueOf(obj);
-        } else {
-            Log.i("Class Type " + obj.getClass());
-            value = getObjectValue(obj, split, 1);
-        }
-        Log.i("find name: " + src + " value: " + value);
-        if (Utils.isEmpty(value)) {
-            value = value.replaceAll("\\$", "\\\\\\$");
-        }
-        return value;
-    }
-
-
     private String getObjectValue(Object object, String[] args, int index) {
         String result = "";
         int argv = args.length;

@@ -16,13 +16,13 @@ import pig.dream.template.utils.Utils;
 public abstract class Statement {
 
     /** 需要处理的字符串 */
-    private String result;
+    protected String result;
 
-    /** 第一个括号中的字符串数据 */
-    private String variable;
+    /** 表达式数据 */
+    protected String variable;
 
-    /** 带输出的字符串数据 */
-    private String out;
+    /** 输出的字符串数据 */
+    protected String out;
 
     private int lastIndex;
     private int start;
@@ -36,6 +36,8 @@ public abstract class Statement {
 
     protected abstract String exec(Map<String, Object> data);
 
+    protected abstract int type();
+
     public void start(String variable, Matcher matcher, int lastIndex) {
         this.variable = variable;
         this.lastIndex = lastIndex;
@@ -44,16 +46,14 @@ public abstract class Statement {
         lastStr = result.substring(lastIndex, matcher.start());
     }
 
-    public void end(StringBuilder sb, Map<String, Object> data, Matcher matcher) {
+    public void end(Matcher matcher) {
         this.end = matcher.start();
         this.out = result.substring(start, end);
-
-        sb.append(lastStr);
-        sb.append(exec(data));
     }
 
-    public void appenTail(StringBuilder sb, String r, int lastIndex) {
-        sb.append(r.substring(lastIndex, r.length()));
+    public void append(StringBuilder sb, Map<String, Object> data) {
+        sb.append(lastStr);
+        sb.append(exec(data));
     }
 
     private String parseArgs(String src, Map<String, Object> data) {
@@ -97,5 +97,10 @@ public abstract class Statement {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public final static class TYPE {
+        public static final int IF = 1;
+        public static final int FOR = 2;
     }
 }
