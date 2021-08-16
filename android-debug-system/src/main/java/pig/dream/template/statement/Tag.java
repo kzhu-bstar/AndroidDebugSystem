@@ -16,8 +16,8 @@ public class Tag {
         tags.add(new Tag("if", Tag.BEGIN, Statement.TYPE.IF));
         tags.add(new Tag("elseif", Tag.CENTRE, Statement.TYPE.IF));
         tags.add(new Tag("endif", Tag.END, Statement.TYPE.IF));
-//        tags.add(new Tag("for", Tag.BEGIN, Statement.TYPE.FOR));
-//        tags.add(new Tag("endfor", Tag.END, Statement.TYPE.FOR));
+        tags.add(new Tag("for", Tag.BEGIN, Statement.TYPE.FOR));
+        tags.add(new Tag("endfor", Tag.END, Statement.TYPE.FOR));
     }
 
     public final static int BEGIN = 0;

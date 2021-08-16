@@ -2,6 +2,7 @@ package pig.dream.adstest;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -31,5 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
+        Singleton<String> a
     }
 }

@@ -74,11 +74,12 @@ public class HttpRoute {
     private List<String> getClassName(Context ctx, String packageName) {
         List<String> classNameList = new ArrayList<String>();
         try {
-
+            Log.i("ADS", "PackageResourcePath: " + ctx.getPackageResourcePath());
             DexFile df = new DexFile(ctx.getPackageResourcePath());//通过DexFile查找当前的APK中可执行文件
             Enumeration<String> enumeration = df.entries();//获取df中的元素  这里包含了所有可执行的类名 该类名包含了包名+类名的方式
             while (enumeration.hasMoreElements()) {//遍历
                 String className = (String) enumeration.nextElement();
+                Log.i("ADS", "DexFile entries className: " + className);
 
                 if (className.contains(packageName)) {//在当前所有可执行的类里面查找包含有该包名的所有类
                     classNameList.add(className);
